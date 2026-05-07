@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Freelancer AI Assistant</title>
+</head>
+<body>
+  <h1>Freelancer Contract Generator</h1>
+  <form id="contractForm">
+    <input type="text" placeholder="Freelancer Name" id="freelancerName" required><br>
+    <input type="text" placeholder="Client Name" id="clientName" required><br>
+    <input type="text" placeholder="Project Type" id="projectType" required><br>
+    <input type="text" placeholder="Rate" id="rate" required><br>
+    <input type="text" placeholder="Deadline" id="deadline" required><br>
+    <button type="submit">Generate Contract</button>
+  </form>
+
+  <script>
+    document.getElementById("contractForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        freelancerName: document.getElementById("freelancerName").value,
+        clientName: document.getElementById("clientName").value,
+        projectType: document.getElementById("projectType").value,
+        rate: document.getElementById("rate").value,
+        deadline: document.getElementById("deadline").value,
+      };
+
+      const response = await fetch("/api/generate-contract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "contract.pdf";
+      a.click();
+    });
+  </script>
+</body>
+</html>
